@@ -39,14 +39,6 @@ public class HeroController {
         }
     }
 
-    @GetMapping(value = "/{heroId}")
-    public ResponseEntity<HeroDto> findHeroById(@PathVariable("heroId") UUID heroId){
-        return heroService.findHeroById(heroId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-
     @DeleteMapping(value = "/{heroId}")
     public ResponseEntity<Void> deleteHeroById(@PathVariable("heroId") UUID heroId){
         Optional<HeroDto> hero = heroService.findHeroById(heroId);
@@ -55,6 +47,21 @@ public class HeroController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(value = "/{heroId}")
+    public ResponseEntity<HeroDto> findHeroById(@PathVariable("heroId") UUID heroId){
+        return heroService.findHeroById(heroId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping(value = "/name/{heroName}")
+    public ResponseEntity<HeroDto> findHeroByName(@PathVariable("heroName") String heroName){
+
+        return heroService.findHeroByName(heroName)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

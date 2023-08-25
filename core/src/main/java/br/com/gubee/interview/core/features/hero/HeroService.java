@@ -59,4 +59,9 @@ public class HeroService {
     }
 
 
+    public Optional<HeroDto> findHeroByName(String name){
+        return Optional.ofNullable(heroRepository.findHeroByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Hero not found with name: " + name)));
+    }
+
 }

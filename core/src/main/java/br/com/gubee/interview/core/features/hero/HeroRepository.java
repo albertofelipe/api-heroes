@@ -41,6 +41,14 @@ public class HeroRepository {
                 id);
     }
 
+    public void deleteById(UUID id) {
+        var sql = """
+                    DELETE FROM hero
+                    WHERE id = ?;
+                  """;
+        jdbcTemplate.update(sql, id);
+    }
+
     public Optional<HeroDto> findHeroById(UUID id) {
         var sql = """
                     SELECT name, race, enabled, power_stats_id, strength, agility, dexterity, intelligence
@@ -55,14 +63,20 @@ public class HeroRepository {
                 .findFirst();
     }
 
-    public void deleteById(UUID id) {
-        var sql = """
-                    DELETE FROM hero
-                    WHERE id = ?;
-                  """;
-        jdbcTemplate.update(sql, id);
-    }
+    public Optional<HeroDto> findHeroByName(String name) {
 
+        var sql = """
+                    SELECT name, race, enabled, power_stats_id, strength, agility, dexterity, intelligence
+                    FROM hero h
+                    JOIN power_stats ps
+                    ON h.power_stats_id = ps.id
+                    WHERE h.name = ?;
+                  """;
+
+        return jdbcTemplate.query(sql, new HeroRowMapper(), name)
+                .stream()
+                .findFirst();
+    }
 
     public UUID getIdFromPowerStats(UUID heroId){
         var sql = """
