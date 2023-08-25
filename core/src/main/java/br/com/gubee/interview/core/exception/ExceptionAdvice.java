@@ -19,6 +19,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -91,5 +92,11 @@ public class ExceptionAdvice {
     ResponseEntity<Object> handleResourceAccessException(ResourceAccessException e) {
         log.error(e.getMessage(), e);
         return status(BAD_GATEWAY).body("message.integration.connection.refused");
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException e) {
+        log.error(e.getMessage());
+        return status(NOT_FOUND).build();
     }
 }
