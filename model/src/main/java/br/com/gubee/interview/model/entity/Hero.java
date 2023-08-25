@@ -1,4 +1,4 @@
-package br.com.gubee.interview.model.enums.entity;
+package br.com.gubee.interview.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
