@@ -45,4 +45,13 @@ public class PowerStatsRepository {
                 heroDto.getIntelligence(),
                 id);
     }
+
+
+    public void deletePowerStats(UUID id){
+        var sql = """
+                  DELETE FROM power_stats
+                  WHERE id = ?;
+                  """;
+        jdbcTemplate.update(sql, id);
+    }
 }

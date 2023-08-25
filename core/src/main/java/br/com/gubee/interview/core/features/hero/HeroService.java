@@ -46,6 +46,13 @@ public class HeroService {
         return heroDto;
     }
 
+    @Transactional
+    public void deleteHeroById(UUID id){
+        UUID idToTbeDeleted = heroRepository.getIdFromPowerStats(id);
+        heroRepository.deleteById(id);
+        powerStatsRepository.deletePowerStats(idToTbeDeleted);
+    }
+
     public Optional<HeroDto> findHeroById(UUID id) {
         return Optional.ofNullable(heroRepository.findHeroById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hero not found with ID: " + id)));

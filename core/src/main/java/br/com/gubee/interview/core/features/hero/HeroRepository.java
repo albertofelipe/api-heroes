@@ -55,6 +55,14 @@ public class HeroRepository {
                 .findFirst();
     }
 
+    public void deleteById(UUID id) {
+        var sql = """
+                    DELETE FROM hero
+                    WHERE id = ?;
+                  """;
+        jdbcTemplate.update(sql, id);
+    }
+
 
     public UUID getIdFromPowerStats(UUID heroId){
         var sql = """

@@ -45,4 +45,16 @@ public class HeroController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+    @DeleteMapping(value = "/{heroId}")
+    public ResponseEntity<Void> deleteHeroById(@PathVariable("heroId") UUID heroId){
+        Optional<HeroDto> hero = heroService.findHeroById(heroId);
+        if(hero.isPresent()){
+            heroService.deleteHeroById(heroId);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }
