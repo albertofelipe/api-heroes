@@ -64,4 +64,10 @@ public class HeroController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping(value = "/compare/stats")
+    public ResponseEntity<CompareHeroes> compareStatsFromHeroes(
+            @RequestBody CompareHeroes compareHeroes){
+        return ResponseEntity.ok(heroService.compareStatsFromHeroes(compareHeroes));
+    }
+
 }

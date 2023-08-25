@@ -64,4 +64,19 @@ public class HeroService {
                 .orElseThrow(() -> new EntityNotFoundException("Hero not found with name: " + name)));
     }
 
+
+    public CompareHeroes compareStatsFromHeroes(CompareHeroes compareHeroes){
+        HeroDto hero1 = heroRepository.findHeroById(compareHeroes.getHero1())
+                .orElseThrow(() -> new EntityNotFoundException("Hero 1 not found"));
+        HeroDto hero2 = heroRepository.findHeroById(compareHeroes.getHero2())
+                .orElseThrow(() -> new EntityNotFoundException("Hero 2 not found"));
+
+        compareHeroes.setStrengthDif(hero1.getStrength() - hero2.getStrength());
+        compareHeroes.setAgilityDif(hero1.getAgility() - hero2.getAgility());
+        compareHeroes.setDexterityDif(hero1.getDexterity() - hero2.getDexterity());
+        compareHeroes.setIntelligenceDif(hero1.getIntelligence() - hero2.getIntelligence());
+
+        return compareHeroes;
+    }
+
 }
