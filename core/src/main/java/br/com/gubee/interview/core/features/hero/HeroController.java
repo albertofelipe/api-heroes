@@ -25,4 +25,24 @@ public class HeroController {
     public HeroDto create(@Validated @RequestBody HeroDto heroDto) {
         return heroService.createHero(heroDto);
     }
+
+
+    @PutMapping(value = "/{heroId}")
+    public ResponseEntity<HeroDto> updateHero(@PathVariable UUID heroId,
+                                              @RequestBody HeroDto heroDto){
+
+        Optional<HeroDto> hero = heroService.findHeroById(heroId);
+        if(hero.isPresent()){
+            return ResponseEntity.ok(heroService.updateHero(heroDto, heroId));
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(value = "/{heroId}")
+    public ResponseEntity<HeroDto> findHeroById(@PathVariable("heroId") UUID heroId){
+        return heroService.findHeroById(heroId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

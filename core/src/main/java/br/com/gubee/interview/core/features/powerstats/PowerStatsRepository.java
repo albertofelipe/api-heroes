@@ -30,4 +30,19 @@ public class PowerStatsRepository {
                 powerStatsDto.getDexterity(),
                 powerStatsDto.getIntelligence());
     }
+
+    public void updatePowerStats(HeroDto heroDto, UUID id){
+        var sql = """
+                  UPDATE power_stats
+                  SET strength = ?, agility = ?, dexterity = ?, intelligence = ?
+                  WHERE id = ?;
+                  """;
+
+        jdbcTemplate.update(sql,
+                heroDto.getStrength(),
+                heroDto.getAgility(),
+                heroDto.getDexterity(),
+                heroDto.getIntelligence(),
+                id);
     }
+}

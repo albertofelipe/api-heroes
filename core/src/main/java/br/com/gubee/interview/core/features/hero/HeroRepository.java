@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -25,5 +26,47 @@ public class HeroRepository {
                 heroDto.getRace(),
                 idPowerStats);
     }
+
+    public int updateHero(HeroDto heroDto, UUID id){
+        var sql = """
+                    UPDATE hero
+                    SET name = ?, race =?, enabled = ?, updated_at = now()
+                    WHERE id = ?
+                  """;
+
+        return jdbcTemplate.update(sql,
+                heroDto.getName(),
+                heroDto.getRace(),
+                heroDto.isEnabled(),
+                id);
+    }
+
+    public Optional<HeroDto> findHeroById(UUID id) {
+        var sql = """
+                    SELECT name, race, enabled, power_stats_id, strength, agility, dexterity, intelligence
+                    FROM hero h
+                    JOIN power_stats ps
+                    ON h.power_stats_id = ps.id
+                    WHERE h.id = ?;
+                  """;
+
+        return jdbcTemplate.query(sql, new HeroRowMapper(), id)
+                .stream()
+                .findFirst();
+    }
+
+
+    public UUID getIdFromPowerStats(UUID heroId){
+        var sql = """
+                    SELECT h.power_stats_id
+                    FROM hero h
+                    JOIN power_stats ps
+                    ON h.power_stats_id = ps.id
+                    WHERE h.id = ?;
+                  """;
+
+        return jdbcTemplate.queryForObject(sql, UUID.class, heroId);
+    }
+
 }
 

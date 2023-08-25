@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,4 +37,19 @@ public class HeroService {
         heroRepository.createHero(heroDto, idPowerStats);
         return heroDto;
     }
+
+    @Transactional
+    public HeroDto updateHero(HeroDto heroDto, UUID id){
+        heroRepository.updateHero(heroDto, id);
+        UUID powerStatsId = heroRepository.getIdFromPowerStats(id);
+        powerStatsRepository.updatePowerStats(heroDto, powerStatsId);
+        return heroDto;
+    }
+
+    public Optional<HeroDto> findHeroById(UUID id) {
+        return Optional.ofNullable(heroRepository.findHeroById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Hero not found with ID: " + id)));
+    }
+
+
 }
