@@ -1,6 +1,5 @@
-package br.com.gubee.interview.model.request;
+package br.com.gubee.interview.model.enums.dto;
 
-import br.com.gubee.interview.model.enums.Race;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,38 +11,38 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static lombok.AccessLevel.PRIVATE;
-
 @Data
-@Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = PRIVATE)
-public class CreateHeroRequest {
+@NoArgsConstructor
+@Builder
+public class HeroDto{
 
     @NotBlank(message = "message.name.mandatory")
     @Length(min = 1, max = 255, message = "message.name.length")
     private String name;
 
     @NotNull(message = "message.race.mandatory")
-    private Race race;
+    private String race;
 
     @Min(value = 0, message = "message.powerstats.strength.min")
     @Max(value = 10, message = "message.powerstats.strength.max")
     @NotNull(message = "message.powerstats.strength.mandatory")
     private int strength;
 
-    @Min(value = 0, message = "message.powerstats.agility.min")
-    @Max(value = 10, message = "message.powerstats.agility.max")
-    @NotNull(message = "message.powerstats.agility.mandatory")
+    @Min(value = 0, message = "message.powerstats.strength.min")
+    @Max(value = 10, message = "message.powerstats.strength.max")
+    @NotNull(message = "message.powerstats.strength.mandatory")
     private int agility;
 
-    @Min(value = 0, message = "message.powerstats.dexterity.min")
-    @Max(value = 10, message = "message.powerstats.dexterity.max")
-    @NotNull(message = "message.powerstats.dexterity.mandatory")
+    @Min(value = 0, message = "message.powerstats.strength.min")
+    @Max(value = 10, message = "message.powerstats.strength.max")
+    @NotNull(message = "message.powerstats.strength.mandatory")
     private int dexterity;
 
-    @Min(value = 0, message = "message.powerstats.intelligence.min")
-    @Max(value = 10, message = "message.powerstats.intelligence.max")
-    @NotNull(message = "message.powerstats.intelligence.mandatory")
+    @Min(value = 0, message = "message.powerstats.strength.min")
+    @Max(value = 10, message = "message.powerstats.strength.max")
+    @NotNull(message = "message.powerstats.strength.mandatory")
     private int intelligence;
+
+    private boolean enabled = true;
 }

@@ -12,10 +12,4 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HeroService {
 
-    private final HeroRepository heroRepository;
-
-    @Transactional
-    public UUID create(CreateHeroRequest createHeroRequest) {
-        return heroRepository.create(new Hero(createHeroRequest, UUID.randomUUID()));
-    }
 }

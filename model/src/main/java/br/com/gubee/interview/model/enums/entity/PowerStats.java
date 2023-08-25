@@ -1,6 +1,5 @@
-package br.com.gubee.interview.model;
+package br.com.gubee.interview.model.enums.entity;
 
-import br.com.gubee.interview.model.request.CreateHeroRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +11,10 @@ import java.util.UUID;
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
-@NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor
+@NoArgsConstructor(access = PRIVATE)
 @Builder
 public class PowerStats {
-
     private UUID id;
     private int strength;
     private int agility;
@@ -24,11 +22,4 @@ public class PowerStats {
     private int intelligence;
     private Instant createdAt;
     private Instant updatedAt;
-
-    public PowerStats(CreateHeroRequest createHeroRequest) {
-        this.strength = createHeroRequest.getStrength();
-        this.agility = createHeroRequest.getAgility();
-        this.dexterity = createHeroRequest.getDexterity();
-        this.intelligence = createHeroRequest.getIntelligence();
-    }
 }
