@@ -1,9 +1,10 @@
 package br.com.gubee.interview.core.features.powerstats;
 
-import br.com.gubee.interview.model.PowerStats;
+import br.com.gubee.interview.model.dto.HeroDto;
+import br.com.gubee.interview.model.dto.PowerStatsDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -12,16 +13,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PowerStatsRepository {
 
-    private static final String CREATE_POWER_STATS_QUERY = "INSERT INTO power_stats" +
-        " (strength, agility, dexterity, intelligence)" +
-        " VALUES (:strength, :agility, :dexterity, :intelligence) RETURNING id";
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    public UUID createPowerStats(PowerStatsDto powerStatsDto) {
+        var sql = """
+                  INSERT INTO power_stats
+                  (id, strength, agility, dexterity, intelligence)
+                  VALUES (uuid_generate_v4(), ?, ?, ?, ?)
+                  RETURNING id;
+                  """;
 
-    UUID create(PowerStats powerStats) {
-        return namedParameterJdbcTemplate.queryForObject(
-            CREATE_POWER_STATS_QUERY,
-            new BeanPropertySqlParameterSource(powerStats),
-            UUID.class);
+        return jdbcTemplate.queryForObject(sql, UUID.class,
+                powerStatsDto.getStrength(),
+                powerStatsDto.getAgility(),
+                powerStatsDto.getDexterity(),
+                powerStatsDto.getIntelligence());
     }
-}
+    }
