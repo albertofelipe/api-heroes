@@ -6,6 +6,7 @@ import br.com.gubee.interview.model.dto.HeroDto;
 import br.com.gubee.interview.model.dto.PowerStatsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +19,16 @@ import java.util.UUID;
 public class HeroService {
 
     @Autowired
-    private HeroRepository heroRepository;
+    private final HeroRepository heroRepository;
 
     @Autowired
-    private PowerStatsRepository powerStatsRepository;
+    private final PowerStatsRepository powerStatsRepository;
 
     @Transactional
     public HeroDto createHero(HeroDto heroDto) {
+        if(heroRepository.findHeroByName(heroDto.getName()).isPresent()){
+            throw new DataIntegrityViolationException("There is already a hero named " + heroDto.getName());
+        }
 
         PowerStatsDto powerStatsDto = new PowerStatsDto(
                 heroDto.getStrength(),
@@ -40,6 +44,10 @@ public class HeroService {
 
     @Transactional
     public HeroDto updateHero(HeroDto heroDto, UUID id){
+        if(heroRepository.findHeroByName(heroDto.getName()).isPresent()){
+            throw new DataIntegrityViolationException("There is already a hero named " + heroDto.getName());
+        }
+
         heroRepository.updateHero(heroDto, id);
         UUID powerStatsId = heroRepository.getIdFromPowerStats(id);
         powerStatsRepository.updatePowerStats(heroDto, powerStatsId);
