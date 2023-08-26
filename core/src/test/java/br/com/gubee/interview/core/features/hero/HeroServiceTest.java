@@ -50,6 +50,25 @@ class HeroServiceTest {
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
+
+    @Test
+    void updateHero_WithValidData_ReturnsHero(){
+        UUID heroUuid = UUID.randomUUID();
+        HeroDto sut = heroService.updateHero(HERO_DTO, heroUuid);
+
+        assertThat(sut).isNotNull()
+                .isEqualTo(HERO_DTO);
+    }
+
+    @Test
+    void updateHero_WithInvalidData_ThrowException(){
+        when(heroRepository.findHeroByName(INVALID_HERO.getName()))
+                .thenThrow(DataIntegrityViolationException.class);
+
+        assertThatThrownBy(() -> heroService.updateHero(INVALID_HERO, UUID.randomUUID()))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
     @Test
     void deleteHero_WithValidId_DoesNotThrowAnyException(){
         assertThatCode(() -> heroService.deleteHeroById(UUID.randomUUID()))
